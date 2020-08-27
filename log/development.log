@@ -1,0 +1,568 @@
+  [1m[35m (213.4ms)[0m  [1m[35mCREATE DATABASE "test-blockchain-indexer" ENCODING = 'unicode'[0m
+  [1m[35m (79.2ms)[0m  [1m[35mCREATE DATABASE "text-blockchain-indexer-test" ENCODING = 'unicode'[0m
+  [1m[35m (1.1ms)[0m  [1m[35mCREATE DATABASE "test-blockchain-indexer" ENCODING = 'unicode'[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE DATABASE "text-blockchain-indexer-test" ENCODING = 'unicode'[0m
+  [1m[35m (49.9ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (25.6ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (8.0ms)[0m  [1m[34mSELECT pg_try_advisory_lock(8634642310462501935)[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (19.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2020-08-27 11:23:45.493314"], ["updated_at", "2020-08-27 11:23:45.493314"]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(8634642310462501935)[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/" for ::1 at 2020-08-27 16:24:24 +0500
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /Users/abubakar/.rvm/gems/ruby-2.5.7/gems/railties-6.0.3.2/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /Users/abubakar/.rvm/gems/ruby-2.5.7/gems/railties-6.0.3.2/lib/rails/templates/rails/welcome/index.html.erb (Duration: 7.9ms | Allocations: 462)
+Completed 200 OK in 19ms (Views: 11.2ms | ActiveRecord: 0.0ms | Allocations: 3129)
+
+
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_try_advisory_lock(8634642310462501935)[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateUsers (20200826191314)
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (34.8ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "name" character varying, "email" character varying, "password_digest" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[36mprimary::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200826191314"]]
+  [1m[35m (1.1ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateTransactions (20200827043045)
+  [1m[35m (6.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (18.9ms)[0m  [1m[35mCREATE TABLE "transactions" ("id" bigserial primary key, "block_number" integer, "time_stamp" character varying, "hash" character varying, "nonce" integer, "blockHash" character varying, "transaction_index" integer, "from" bigint, "to" bigint, "value" integer, "gas" character varying, "gas_price" character varying, "is_error" character varying, "txreceipt_status" character varying, "input" character varying, "contract_address" character varying, "cumulative_gas_used" character varying, "gas_used" character varying, "confirmations" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[36mprimary::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200827043045"]]
+  [1m[35m (1.6ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateComments (20200827053123)
+  [1m[35m (6.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (23.7ms)[0m  [1m[35mCREATE TABLE "comments" ("id" bigserial primary key, "body" text, "transaction_id" bigint, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, CONSTRAINT "fk_rails_2dc304d3a5"
+FOREIGN KEY ("transaction_id")
+  REFERENCES "transactions" ("id")
+)[0m
+  [1m[35m (1.1ms)[0m  [1m[35mCREATE  INDEX  "index_comments_on_transaction_id" ON "comments"  ("transaction_id")[0m
+  [1m[36mprimary::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200827053123"]]
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_advisory_unlock(8634642310462501935)[0m
+  [1m[35m (11.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/api/v1/transactions" for ::1 at 2020-08-27 16:41:39 +0500
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActionController::RoutingError (No route matches [GET] "/api/v1/transactions"):
+  
+actionpack (6.0.3.2) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+web-console (4.0.4) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.4) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.4) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.4) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.3.2) lib/rails/rack/logger.rb:37:in `call_app'
+railties (6.0.3.2) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.3.2) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.3) lib/rack/method_override.rb:24:in `call'
+rack (2.2.3) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.3.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.3) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/host_authorization.rb:82:in `call'
+webpacker (4.3.0) lib/webpacker/dev_server_proxy.rb:23:in `perform_request'
+rack-proxy (0.6.5) lib/rack/proxy.rb:57:in `call'
+railties (6.0.3.2) lib/rails/engine.rb:527:in `call'
+puma (4.3.5) lib/puma/configuration.rb:228:in `call'
+puma (4.3.5) lib/puma/server.rb:713:in `handle_request'
+puma (4.3.5) lib/puma/server.rb:472:in `process_client'
+puma (4.3.5) lib/puma/server.rb:328:in `block in run'
+puma (4.3.5) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/api/v1/transactions" for ::1 at 2020-08-27 16:42:59 +0500
+Processing by Api::V1::TransactionsController#index as JSON
+  [1m[36mTransaction Load (13.3ms)[0m  [1m[34mSELECT DISTINCT "transactions".* FROM "transactions" WHERE (transaction_id = 'id')[0m
+  ↳ app/controllers/api/v1/transactions_controller.rb:6:in `index'
+Completed 500 Internal Server Error in 19ms (ActiveRecord: 13.3ms | Allocations: 3646)
+
+
+  
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "transaction_id" does not exist
+LINE 1: ...TINCT "transactions".* FROM "transactions" WHERE (transactio...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "transactions.transaction_index".
+):
+  
+app/controllers/api/v1/transactions_controller.rb:6:in `index'
+Started GET "/api/v1/transactions" for ::1 at 2020-08-27 16:43:20 +0500
+Processing by Api::V1::TransactionsController#index as JSON
+  [1m[36mTransaction Load (1.1ms)[0m  [1m[34mSELECT "transactions".* FROM "transactions"[0m
+  ↳ app/controllers/api/v1/transactions_controller.rb:6:in `index'
+Completed 200 OK in 9ms (Views: 3.3ms | ActiveRecord: 3.6ms | Allocations: 3676)
+
+
+Started POST "/api/v1/transactions" for ::1 at 2020-08-27 16:44:36 +0500
+Processing by Api::V1::TransactionsController#create as JSON
+  Parameters: {"block_number"=>"3861673", "time_stamp"=>"1534595759", "hash"=>"0x9c832e468e26ae9026b273b23ebb897e38310dd7aef8758060dfb8b0f08a3d12", "nonce"=>"792173", "block_hash"=>"0x15b98dd82808ac81de70dbc711f4ae386fbcf6b10a955a5bb88c5c7541093778", "transaction_index"=>"30", "from"=>"0x3e298dc424b24729cc0baa09b2560b5103d47eb6", "to"=>"0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a", "value"=>"1000000000000000000", "gas"=>"314150", "gas_price"=>"1000000000", "is_error"=>"0", "txreceipt_status"=>"1", "input"=>"0x", "contract_address"=>"", "cumulative_gas_used"=>"2752178", "gas_used"=>"21000", "confirmations"=>"4710071", "transaction"=>{"block_number"=>"3861673", "time_stamp"=>"1534595759", "hash"=>"0x9c832e468e26ae9026b273b23ebb897e38310dd7aef8758060dfb8b0f08a3d12", "nonce"=>"792173", "transaction_index"=>"30", "from"=>"0x3e298dc424b24729cc0baa09b2560b5103d47eb6", "to"=>"0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a", "value"=>"1000000000000000000", "gas"=>"314150", "gas_price"=>"1000000000", "is_error"=>"0", "txreceipt_status"=>"1", "input"=>"0x", "contract_address"=>"", "cumulative_gas_used"=>"2752178", "gas_used"=>"21000", "confirmations"=>"4710071"}}
+[31mUnpermitted parameters: :block_number, :time_stamp, :block_hash, :transaction_index, :gas_price, :is_error, :contract_address, :cumulative_gas_used, :gas_used, :format, :transaction[0m
+Completed 500 Internal Server Error in 9ms (ActiveRecord: 5.6ms | Allocations: 2823)
+
+
+  
+ActiveRecord::DangerousAttributeError (hash is defined by Active Record. Check to make sure that you don't have an attribute or method with the same name.):
+  
+app/controllers/api/v1/transactions_controller.rb:14:in `create'
+Started POST "/api/v1/transactions" for ::1 at 2020-08-27 16:46:03 +0500
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::V1::TransactionsController#create as JSON
+  Parameters: {"block_number"=>"3861673", "time_stamp"=>"1534595759", "hash"=>"0x9c832e468e26ae9026b273b23ebb897e38310dd7aef8758060dfb8b0f08a3d12", "nonce"=>"792173", "block_hash"=>"0x15b98dd82808ac81de70dbc711f4ae386fbcf6b10a955a5bb88c5c7541093778", "transaction_index"=>"30", "from"=>"0x3e298dc424b24729cc0baa09b2560b5103d47eb6", "to"=>"0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a", "value"=>"1000000000000000000", "gas"=>"314150", "gas_price"=>"1000000000", "is_error"=>"0", "txreceipt_status"=>"1", "input"=>"0x", "contract_address"=>"", "cumulative_gas_used"=>"2752178", "gas_used"=>"21000", "confirmations"=>"4710071", "transaction"=>{"block_number"=>"3861673", "time_stamp"=>"1534595759", "hash"=>"0x9c832e468e26ae9026b273b23ebb897e38310dd7aef8758060dfb8b0f08a3d12", "nonce"=>"792173", "transaction_index"=>"30", "from"=>"0x3e298dc424b24729cc0baa09b2560b5103d47eb6", "to"=>"0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a", "value"=>"1000000000000000000", "gas"=>"314150", "gas_price"=>"1000000000", "is_error"=>"0", "txreceipt_status"=>"1", "input"=>"0x", "contract_address"=>"", "cumulative_gas_used"=>"2752178", "gas_used"=>"21000", "confirmations"=>"4710071"}}
+[31mUnpermitted parameters: :block_number, :time_stamp, :block_hash, :transaction_index, :gas_price, :is_error, :contract_address, :cumulative_gas_used, :gas_used, :format, :transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/transactions_controller.rb:15:in `create'
+  [1m[36mTransaction Exists? (7.0ms)[0m  [1m[34mSELECT 1 AS one FROM "transactions" WHERE "transactions"."from" = $1 LIMIT $2[0m  [["from", 0], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/transactions_controller.rb:15:in `create'
+  [1m[36mTransaction Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "transactions" WHERE "transactions"."to" = $1 LIMIT $2[0m  [["to", 0], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/transactions_controller.rb:15:in `create'
+  [1m[35m (0.1ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/v1/transactions_controller.rb:15:in `create'
+Completed 500 Internal Server Error in 64ms (ActiveRecord: 15.2ms | Allocations: 21270)
+
+
+  
+ActiveModel::RangeError (1000000000000000000 is out of range for ActiveModel::Type::Integer with limit 4 bytes):
+  
+app/controllers/api/v1/transactions_controller.rb:15:in `create'
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(8634642310462501935)[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to RemoveValueFromTransactions (20200827043806)
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (24.9ms)[0m  [1m[35mALTER TABLE "transactions" DROP COLUMN "value"[0m
+  [1m[36mprimary::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200827043806"]]
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+Migrating to AddValueToTransactions (20200827043903)
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.6ms)[0m  [1m[35mALTER TABLE "transactions" ADD "value" character varying[0m
+  [1m[36mprimary::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200827043903"]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(8634642310462501935)[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started POST "/api/v1/transactions" for ::1 at 2020-08-27 16:48:10 +0500
+Processing by Api::V1::TransactionsController#create as JSON
+  Parameters: {"block_number"=>"3861673", "time_stamp"=>"1534595759", "hash"=>"0x9c832e468e26ae9026b273b23ebb897e38310dd7aef8758060dfb8b0f08a3d12", "nonce"=>"792173", "block_hash"=>"0x15b98dd82808ac81de70dbc711f4ae386fbcf6b10a955a5bb88c5c7541093778", "transaction_index"=>"30", "from"=>"0x3e298dc424b24729cc0baa09b2560b5103d47eb6", "to"=>"0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a", "value"=>"1000000000000000000", "gas"=>"314150", "gas_price"=>"1000000000", "is_error"=>"0", "txreceipt_status"=>"1", "input"=>"0x", "contract_address"=>"", "cumulative_gas_used"=>"2752178", "gas_used"=>"21000", "confirmations"=>"4710071", "transaction"=>{"block_number"=>"3861673", "time_stamp"=>"1534595759", "hash"=>"0x9c832e468e26ae9026b273b23ebb897e38310dd7aef8758060dfb8b0f08a3d12", "nonce"=>"792173", "transaction_index"=>"30", "from"=>"0x3e298dc424b24729cc0baa09b2560b5103d47eb6", "to"=>"0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a", "gas"=>"314150", "gas_price"=>"1000000000", "is_error"=>"0", "txreceipt_status"=>"1", "input"=>"0x", "contract_address"=>"", "cumulative_gas_used"=>"2752178", "gas_used"=>"21000", "confirmations"=>"4710071", "value"=>"1000000000000000000"}}
+[31mUnpermitted parameters: :block_number, :time_stamp, :block_hash, :transaction_index, :gas_price, :is_error, :contract_address, :cumulative_gas_used, :gas_used, :format, :transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/transactions_controller.rb:15:in `create'
+  [1m[36mTransaction Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "transactions" WHERE "transactions"."from" = $1 LIMIT $2[0m  [["from", 0], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/transactions_controller.rb:15:in `create'
+  [1m[36mTransaction Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "transactions" WHERE "transactions"."to" = $1 LIMIT $2[0m  [["to", 0], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/transactions_controller.rb:15:in `create'
+  [1m[36mTransaction Create (0.9ms)[0m  [1m[32mINSERT INTO "transactions" ("hash", "nonce", "from", "to", "gas", "txreceipt_status", "input", "confirmations", "created_at", "updated_at", "value") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["hash", "0x9c832e468e26ae9026b273b23ebb897e38310dd7aef8758060dfb8b0f08a3d12"], ["nonce", 792173], ["from", 0], ["to", 0], ["gas", "314150"], ["txreceipt_status", "1"], ["input", "0x"], ["confirmations", "4710071"], ["created_at", "2020-08-27 11:48:10.876823"], ["updated_at", "2020-08-27 11:48:10.876823"], ["value", "1000000000000000000"]]
+  ↳ app/controllers/api/v1/transactions_controller.rb:15:in `create'
+  [1m[35m (0.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/transactions_controller.rb:15:in `create'
+Completed 200 OK in 40ms (Views: 0.5ms | ActiveRecord: 8.4ms | Allocations: 20341)
+
+
+Started POST "/api/v1/users" for ::1 at 2020-08-27 16:49:15 +0500
+  
+LoadError (cannot load such file -- bcrypt):
+  
+app/models/user.rb:2:in `<class:User>'
+app/models/user.rb:1:in `<top (required)>'
+Started POST "/api/v1/users" for ::1 at 2020-08-27 16:50:34 +0500
+Processing by Api::V1::UsersController#create as JSON
+  Parameters: {"user"=>{"name"=>"Adil Sarwar", "email"=>"adil.testing@amplifyd.io", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}}
+Completed 500 Internal Server Error in 74ms (ActiveRecord: 59.5ms | Allocations: 5277)
+
+
+  
+ActiveModel::UnknownAttributeError (unknown attribute 'password' for User.):
+  
+app/controllers/api/v1/users_controller.rb:18:in `create'
+Started POST "/api/v1/users" for ::1 at 2020-08-27 16:51:24 +0500
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::V1::UsersController#create as JSON
+  Parameters: {"user"=>{"name"=>"Adil Sarwar", "email"=>"adil.testing@amplifyd.io", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}}
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/users_controller.rb:19:in `create'
+  [1m[36mUser Exists? (7.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "adil.testing@amplifyd.io"], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/users_controller.rb:19:in `create'
+  [1m[36mUser Create (6.9ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Adil Sarwar"], ["email", "adil.testing@amplifyd.io"], ["password_digest", "$2a$12$JUah1Wnho1VcMsek07bmUOkH9QofXz7gP88TRShIJ1nUCZK2YjvfG"], ["created_at", "2020-08-27 11:51:24.711772"], ["updated_at", "2020-08-27 11:51:24.711772"]]
+  ↳ app/controllers/api/v1/users_controller.rb:19:in `create'
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/users_controller.rb:19:in `create'
+  Rendering api/v1/users/create.json.jbuilder
+  Rendered api/v1/users/create.json.jbuilder (Duration: 4.1ms | Allocations: 832)
+Completed 200 OK in 337ms (Views: 9.0ms | ActiveRecord: 21.3ms | Allocations: 12701)
+
+
+Started POST "/api/v1/auth/login" for ::1 at 2020-08-27 16:51:47 +0500
+Processing by Api::V1::AuthenticationController#login as JSON
+  Parameters: {"user"=>{"email"=>"adil.testing@amplifyd.io", "password"=>"[FILTERED]"}, "authentication"=>{"user"=>{"email"=>"adil.testing@amplifyd.io", "password"=>"[FILTERED]"}}}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Entity in 1ms (ActiveRecord: 0.0ms | Allocations: 471)
+
+
+  
+ActionController::InvalidAuthenticityToken (ActionController::InvalidAuthenticityToken):
+  
+actionpack (6.0.3.2) lib/action_controller/metal/request_forgery_protection.rb:215:in `handle_unverified_request'
+actionpack (6.0.3.2) lib/action_controller/metal/request_forgery_protection.rb:247:in `handle_unverified_request'
+actionpack (6.0.3.2) lib/action_controller/metal/request_forgery_protection.rb:242:in `verify_authenticity_token'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:428:in `block in make_lambda'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:200:in `block (2 levels) in halting'
+actionpack (6.0.3.2) lib/abstract_controller/callbacks.rb:34:in `block (2 levels) in <module:Callbacks>'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:201:in `block in halting'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:513:in `block in invoke_before'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:513:in `each'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:513:in `invoke_before'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:134:in `run_callbacks'
+actionpack (6.0.3.2) lib/abstract_controller/callbacks.rb:41:in `process_action'
+actionpack (6.0.3.2) lib/action_controller/metal/rescue.rb:22:in `process_action'
+actionpack (6.0.3.2) lib/action_controller/metal/instrumentation.rb:33:in `block in process_action'
+activesupport (6.0.3.2) lib/active_support/notifications.rb:180:in `block in instrument'
+activesupport (6.0.3.2) lib/active_support/notifications/instrumenter.rb:24:in `instrument'
+activesupport (6.0.3.2) lib/active_support/notifications.rb:180:in `instrument'
+actionpack (6.0.3.2) lib/action_controller/metal/instrumentation.rb:32:in `process_action'
+actionpack (6.0.3.2) lib/action_controller/metal/params_wrapper.rb:245:in `process_action'
+activerecord (6.0.3.2) lib/active_record/railties/controller_runtime.rb:27:in `process_action'
+actionpack (6.0.3.2) lib/abstract_controller/base.rb:136:in `process'
+actionview (6.0.3.2) lib/action_view/rendering.rb:39:in `process'
+actionpack (6.0.3.2) lib/action_controller/metal.rb:190:in `dispatch'
+actionpack (6.0.3.2) lib/action_controller/metal.rb:254:in `dispatch'
+actionpack (6.0.3.2) lib/action_dispatch/routing/route_set.rb:50:in `dispatch'
+actionpack (6.0.3.2) lib/action_dispatch/routing/route_set.rb:33:in `serve'
+actionpack (6.0.3.2) lib/action_dispatch/journey/router.rb:49:in `block in serve'
+actionpack (6.0.3.2) lib/action_dispatch/journey/router.rb:32:in `each'
+actionpack (6.0.3.2) lib/action_dispatch/journey/router.rb:32:in `serve'
+actionpack (6.0.3.2) lib/action_dispatch/routing/route_set.rb:834:in `call'
+rack (2.2.3) lib/rack/tempfile_reaper.rb:15:in `call'
+rack (2.2.3) lib/rack/etag.rb:27:in `call'
+rack (2.2.3) lib/rack/conditional_get.rb:40:in `call'
+rack (2.2.3) lib/rack/head.rb:12:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/http/content_security_policy.rb:18:in `call'
+rack (2.2.3) lib/rack/session/abstract/id.rb:266:in `context'
+rack (2.2.3) lib/rack/session/abstract/id.rb:260:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/cookies.rb:648:in `call'
+activerecord (6.0.3.2) lib/active_record/migration.rb:567:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/actionable_exceptions.rb:17:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/debug_exceptions.rb:32:in `call'
+web-console (4.0.4) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.4) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.4) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.4) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.3.2) lib/rails/rack/logger.rb:37:in `call_app'
+railties (6.0.3.2) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.3.2) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.3) lib/rack/method_override.rb:24:in `call'
+rack (2.2.3) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.3.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.3) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/host_authorization.rb:82:in `call'
+webpacker (4.3.0) lib/webpacker/dev_server_proxy.rb:23:in `perform_request'
+rack-proxy (0.6.5) lib/rack/proxy.rb:57:in `call'
+railties (6.0.3.2) lib/rails/engine.rb:527:in `call'
+puma (4.3.5) lib/puma/configuration.rb:228:in `call'
+puma (4.3.5) lib/puma/server.rb:713:in `handle_request'
+puma (4.3.5) lib/puma/server.rb:472:in `process_client'
+puma (4.3.5) lib/puma/server.rb:328:in `block in run'
+puma (4.3.5) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started POST "/api/v1/auth/login" for ::1 at 2020-08-27 16:52:42 +0500
+Processing by Api::V1::AuthenticationController#login as JSON
+  Parameters: {"user"=>{"email"=>"adil.testing@amplifyd.io", "password"=>"[FILTERED]"}, "authentication"=>{"user"=>{"email"=>"adil.testing@amplifyd.io", "password"=>"[FILTERED]"}}}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Entity in 1ms (ActiveRecord: 0.0ms | Allocations: 456)
+
+
+  
+ActionController::InvalidAuthenticityToken (ActionController::InvalidAuthenticityToken):
+  
+actionpack (6.0.3.2) lib/action_controller/metal/request_forgery_protection.rb:215:in `handle_unverified_request'
+actionpack (6.0.3.2) lib/action_controller/metal/request_forgery_protection.rb:247:in `handle_unverified_request'
+actionpack (6.0.3.2) lib/action_controller/metal/request_forgery_protection.rb:242:in `verify_authenticity_token'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:428:in `block in make_lambda'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:200:in `block (2 levels) in halting'
+actionpack (6.0.3.2) lib/abstract_controller/callbacks.rb:34:in `block (2 levels) in <module:Callbacks>'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:201:in `block in halting'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:513:in `block in invoke_before'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:513:in `each'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:513:in `invoke_before'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:134:in `run_callbacks'
+actionpack (6.0.3.2) lib/abstract_controller/callbacks.rb:41:in `process_action'
+actionpack (6.0.3.2) lib/action_controller/metal/rescue.rb:22:in `process_action'
+actionpack (6.0.3.2) lib/action_controller/metal/instrumentation.rb:33:in `block in process_action'
+activesupport (6.0.3.2) lib/active_support/notifications.rb:180:in `block in instrument'
+activesupport (6.0.3.2) lib/active_support/notifications/instrumenter.rb:24:in `instrument'
+activesupport (6.0.3.2) lib/active_support/notifications.rb:180:in `instrument'
+actionpack (6.0.3.2) lib/action_controller/metal/instrumentation.rb:32:in `process_action'
+actionpack (6.0.3.2) lib/action_controller/metal/params_wrapper.rb:245:in `process_action'
+activerecord (6.0.3.2) lib/active_record/railties/controller_runtime.rb:27:in `process_action'
+actionpack (6.0.3.2) lib/abstract_controller/base.rb:136:in `process'
+actionview (6.0.3.2) lib/action_view/rendering.rb:39:in `process'
+actionpack (6.0.3.2) lib/action_controller/metal.rb:190:in `dispatch'
+actionpack (6.0.3.2) lib/action_controller/metal.rb:254:in `dispatch'
+actionpack (6.0.3.2) lib/action_dispatch/routing/route_set.rb:50:in `dispatch'
+actionpack (6.0.3.2) lib/action_dispatch/routing/route_set.rb:33:in `serve'
+actionpack (6.0.3.2) lib/action_dispatch/journey/router.rb:49:in `block in serve'
+actionpack (6.0.3.2) lib/action_dispatch/journey/router.rb:32:in `each'
+actionpack (6.0.3.2) lib/action_dispatch/journey/router.rb:32:in `serve'
+actionpack (6.0.3.2) lib/action_dispatch/routing/route_set.rb:834:in `call'
+rack (2.2.3) lib/rack/tempfile_reaper.rb:15:in `call'
+rack (2.2.3) lib/rack/etag.rb:27:in `call'
+rack (2.2.3) lib/rack/conditional_get.rb:40:in `call'
+rack (2.2.3) lib/rack/head.rb:12:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/http/content_security_policy.rb:18:in `call'
+rack (2.2.3) lib/rack/session/abstract/id.rb:266:in `context'
+rack (2.2.3) lib/rack/session/abstract/id.rb:260:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/cookies.rb:648:in `call'
+activerecord (6.0.3.2) lib/active_record/migration.rb:567:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/actionable_exceptions.rb:17:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/debug_exceptions.rb:32:in `call'
+web-console (4.0.4) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.4) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.4) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.4) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.3.2) lib/rails/rack/logger.rb:37:in `call_app'
+railties (6.0.3.2) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.3.2) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.3) lib/rack/method_override.rb:24:in `call'
+rack (2.2.3) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.3.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.3) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/host_authorization.rb:82:in `call'
+webpacker (4.3.0) lib/webpacker/dev_server_proxy.rb:23:in `perform_request'
+rack-proxy (0.6.5) lib/rack/proxy.rb:57:in `call'
+railties (6.0.3.2) lib/rails/engine.rb:527:in `call'
+puma (4.3.5) lib/puma/configuration.rb:228:in `call'
+puma (4.3.5) lib/puma/server.rb:713:in `handle_request'
+puma (4.3.5) lib/puma/server.rb:472:in `process_client'
+puma (4.3.5) lib/puma/server.rb:328:in `block in run'
+puma (4.3.5) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started POST "/api/v1/auth/login" for ::1 at 2020-08-27 16:54:05 +0500
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::V1::AuthenticationController#login as JSON
+  Parameters: {"user"=>{"email"=>"adil.testing@amplifyd.io", "password"=>"[FILTERED]"}, "authentication"=>{"user"=>{"email"=>"adil.testing@amplifyd.io", "password"=>"[FILTERED]"}}}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Entity in 3ms (ActiveRecord: 0.0ms | Allocations: 474)
+
+
+  
+ActionController::InvalidAuthenticityToken (ActionController::InvalidAuthenticityToken):
+  
+actionpack (6.0.3.2) lib/action_controller/metal/request_forgery_protection.rb:215:in `handle_unverified_request'
+actionpack (6.0.3.2) lib/action_controller/metal/request_forgery_protection.rb:247:in `handle_unverified_request'
+actionpack (6.0.3.2) lib/action_controller/metal/request_forgery_protection.rb:242:in `verify_authenticity_token'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:428:in `block in make_lambda'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:200:in `block (2 levels) in halting'
+actionpack (6.0.3.2) lib/abstract_controller/callbacks.rb:34:in `block (2 levels) in <module:Callbacks>'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:201:in `block in halting'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:513:in `block in invoke_before'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:513:in `each'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:513:in `invoke_before'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:134:in `run_callbacks'
+actionpack (6.0.3.2) lib/abstract_controller/callbacks.rb:41:in `process_action'
+actionpack (6.0.3.2) lib/action_controller/metal/rescue.rb:22:in `process_action'
+actionpack (6.0.3.2) lib/action_controller/metal/instrumentation.rb:33:in `block in process_action'
+activesupport (6.0.3.2) lib/active_support/notifications.rb:180:in `block in instrument'
+activesupport (6.0.3.2) lib/active_support/notifications/instrumenter.rb:24:in `instrument'
+activesupport (6.0.3.2) lib/active_support/notifications.rb:180:in `instrument'
+actionpack (6.0.3.2) lib/action_controller/metal/instrumentation.rb:32:in `process_action'
+actionpack (6.0.3.2) lib/action_controller/metal/params_wrapper.rb:245:in `process_action'
+activerecord (6.0.3.2) lib/active_record/railties/controller_runtime.rb:27:in `process_action'
+actionpack (6.0.3.2) lib/abstract_controller/base.rb:136:in `process'
+actionview (6.0.3.2) lib/action_view/rendering.rb:39:in `process'
+actionpack (6.0.3.2) lib/action_controller/metal.rb:190:in `dispatch'
+actionpack (6.0.3.2) lib/action_controller/metal.rb:254:in `dispatch'
+actionpack (6.0.3.2) lib/action_dispatch/routing/route_set.rb:50:in `dispatch'
+actionpack (6.0.3.2) lib/action_dispatch/routing/route_set.rb:33:in `serve'
+actionpack (6.0.3.2) lib/action_dispatch/journey/router.rb:49:in `block in serve'
+actionpack (6.0.3.2) lib/action_dispatch/journey/router.rb:32:in `each'
+actionpack (6.0.3.2) lib/action_dispatch/journey/router.rb:32:in `serve'
+actionpack (6.0.3.2) lib/action_dispatch/routing/route_set.rb:834:in `call'
+rack (2.2.3) lib/rack/tempfile_reaper.rb:15:in `call'
+rack (2.2.3) lib/rack/etag.rb:27:in `call'
+rack (2.2.3) lib/rack/conditional_get.rb:40:in `call'
+rack (2.2.3) lib/rack/head.rb:12:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/http/content_security_policy.rb:18:in `call'
+rack (2.2.3) lib/rack/session/abstract/id.rb:266:in `context'
+rack (2.2.3) lib/rack/session/abstract/id.rb:260:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/cookies.rb:648:in `call'
+activerecord (6.0.3.2) lib/active_record/migration.rb:567:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/actionable_exceptions.rb:17:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/debug_exceptions.rb:32:in `call'
+web-console (4.0.4) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.4) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.4) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.4) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.3.2) lib/rails/rack/logger.rb:37:in `call_app'
+railties (6.0.3.2) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.3.2) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.3) lib/rack/method_override.rb:24:in `call'
+rack (2.2.3) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.3.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.3) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/host_authorization.rb:82:in `call'
+webpacker (4.3.0) lib/webpacker/dev_server_proxy.rb:23:in `perform_request'
+rack-proxy (0.6.5) lib/rack/proxy.rb:57:in `call'
+railties (6.0.3.2) lib/rails/engine.rb:527:in `call'
+puma (4.3.5) lib/puma/configuration.rb:228:in `call'
+puma (4.3.5) lib/puma/server.rb:713:in `handle_request'
+puma (4.3.5) lib/puma/server.rb:472:in `process_client'
+puma (4.3.5) lib/puma/server.rb:328:in `block in run'
+puma (4.3.5) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started POST "/api/v1/auth/login" for ::1 at 2020-08-27 16:55:00 +0500
+Processing by Api::V1::AuthenticationController#login as JSON
+  Parameters: {"user"=>{"email"=>"adil.testing@amplifyd.io", "password"=>"[FILTERED]"}, "authentication"=>{"user"=>{"email"=>"adil.testing@amplifyd.io", "password"=>"[FILTERED]"}}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "adil.testing@amplifyd.io"], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/authentication_controller.rb:5:in `login'
+  Rendering api/v1/authentication/sign_in.json.jbuilder
+  Rendered api/v1/authentication/sign_in.json.jbuilder (Duration: 2.0ms | Allocations: 585)
+Completed 200 OK in 304ms (Views: 5.6ms | ActiveRecord: 8.2ms | Allocations: 9591)
+
+
+Started GET "/api/v1/users" for ::1 at 2020-08-27 16:55:06 +0500
+Processing by Api::V1::UsersController#index as JSON
+Filter chain halted as :authenticate_request! rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 635)
+
+
+Started POST "/api/v1/auth/login" for ::1 at 2020-08-27 16:55:19 +0500
+Processing by Api::V1::AuthenticationController#login as JSON
+  Parameters: {"user"=>{"email"=>"adil.testing@amplifyd.io", "password"=>"[FILTERED]"}, "authentication"=>{"user"=>{"email"=>"adil.testing@amplifyd.io", "password"=>"[FILTERED]"}}}
+  [1m[36mUser Load (1.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "adil.testing@amplifyd.io"], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/authentication_controller.rb:5:in `login'
+  Rendering api/v1/authentication/sign_in.json.jbuilder
+  Rendered api/v1/authentication/sign_in.json.jbuilder (Duration: 0.6ms | Allocations: 369)
+Completed 200 OK in 272ms (Views: 1.6ms | ActiveRecord: 1.1ms | Allocations: 1490)
+
+
+Started GET "/api/v1/users" for ::1 at 2020-08-27 16:55:34 +0500
+Processing by Api::V1::UsersController#index as JSON
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/base_controller.rb:8:in `authenticate_request!'
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/controllers/api/v1/users_controller.rb:8:in `index'
+Completed 200 OK in 5ms (Views: 1.9ms | ActiveRecord: 0.7ms | Allocations: 2049)
+
+
+Started GET "/api/v1/users/1" for ::1 at 2020-08-27 16:55:38 +0500
+Processing by Api::V1::UsersController#show as JSON
+  Parameters: {"id"=>"1"}
+Filter chain halted as :authenticate_request! rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 596)
+
+
+Started GET "/api/v1/users/1" for ::1 at 2020-08-27 16:55:43 +0500
+Processing by Api::V1::UsersController#show as JSON
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/base_controller.rb:8:in `authenticate_request!'
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/users_controller.rb:42:in `find_user'
+Completed 200 OK in 4ms (Views: 0.4ms | ActiveRecord: 0.7ms | Allocations: 1680)
+
+
+Started GET "/api/v1/transactions" for ::1 at 2020-08-27 16:55:58 +0500
+Processing by Api::V1::TransactionsController#index as JSON
+  [1m[36mTransaction Load (0.9ms)[0m  [1m[34mSELECT "transactions".* FROM "transactions"[0m
+  ↳ app/controllers/api/v1/transactions_controller.rb:6:in `index'
+Completed 200 OK in 35ms (Views: 23.2ms | ActiveRecord: 6.4ms | Allocations: 19437)
+
+
+Started POST "/api/v1/comments" for ::1 at 2020-08-27 16:56:02 +0500
+  
+ActionController::RoutingError (uninitialized constant Api::V1::CommentsController
+Did you mean?  ActionController):
+  
+actionpack (6.0.3.2) lib/action_dispatch/http/request.rb:92:in `rescue in controller_class_for'
+actionpack (6.0.3.2) lib/action_dispatch/http/request.rb:88:in `controller_class_for'
+actionpack (6.0.3.2) lib/action_dispatch/http/request.rb:81:in `controller_class'
+actionpack (6.0.3.2) lib/action_dispatch/routing/route_set.rb:44:in `controller'
+actionpack (6.0.3.2) lib/action_dispatch/routing/route_set.rb:31:in `serve'
+actionpack (6.0.3.2) lib/action_dispatch/journey/router.rb:49:in `block in serve'
+actionpack (6.0.3.2) lib/action_dispatch/journey/router.rb:32:in `each'
+actionpack (6.0.3.2) lib/action_dispatch/journey/router.rb:32:in `serve'
+actionpack (6.0.3.2) lib/action_dispatch/routing/route_set.rb:834:in `call'
+rack (2.2.3) lib/rack/tempfile_reaper.rb:15:in `call'
+rack (2.2.3) lib/rack/etag.rb:27:in `call'
+rack (2.2.3) lib/rack/conditional_get.rb:40:in `call'
+rack (2.2.3) lib/rack/head.rb:12:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/http/content_security_policy.rb:18:in `call'
+rack (2.2.3) lib/rack/session/abstract/id.rb:266:in `context'
+rack (2.2.3) lib/rack/session/abstract/id.rb:260:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/cookies.rb:648:in `call'
+activerecord (6.0.3.2) lib/active_record/migration.rb:567:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (6.0.3.2) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/actionable_exceptions.rb:17:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/debug_exceptions.rb:32:in `call'
+web-console (4.0.4) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.0.4) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.0.4) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.0.4) lib/web_console/middleware.rb:17:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.3.2) lib/rails/rack/logger.rb:37:in `call_app'
+railties (6.0.3.2) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.3.2) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.3.2) lib/rails/rack/logger.rb:26:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.3) lib/rack/method_override.rb:24:in `call'
+rack (2.2.3) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.3.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.3) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.3.2) lib/action_dispatch/middleware/host_authorization.rb:82:in `call'
+webpacker (4.3.0) lib/webpacker/dev_server_proxy.rb:23:in `perform_request'
+rack-proxy (0.6.5) lib/rack/proxy.rb:57:in `call'
+railties (6.0.3.2) lib/rails/engine.rb:527:in `call'
+puma (4.3.5) lib/puma/configuration.rb:228:in `call'
+puma (4.3.5) lib/puma/server.rb:713:in `handle_request'
+puma (4.3.5) lib/puma/server.rb:472:in `process_client'
+puma (4.3.5) lib/puma/server.rb:328:in `block in run'
+puma (4.3.5) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
