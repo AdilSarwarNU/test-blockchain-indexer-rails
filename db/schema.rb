@@ -30,8 +30,6 @@ ActiveRecord::Schema.define(version: 2020_08_27_053123) do
     t.integer "nonce"
     t.string "blockHash"
     t.integer "transaction_index"
-    t.bigint "from"
-    t.bigint "to"
     t.string "gas"
     t.string "gas_price"
     t.string "is_error"
@@ -44,6 +42,8 @@ ActiveRecord::Schema.define(version: 2020_08_27_053123) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "value"
+    t.string "to"
+    t.string "from"
   end
 
   create_table "users", force: :cascade do |t|
