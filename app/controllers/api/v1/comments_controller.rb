@@ -1,7 +1,7 @@
 class Api::V1::CommentsController < Api::V1::BaseController
 
   def create
-    @comment = Comment.new(comment_params)
+    @comment = @current_user.comments.create(comment_params)
     if @comment.save
       render json: {message: 'comment has posted', result: @comment}
     end

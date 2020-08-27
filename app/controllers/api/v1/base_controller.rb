@@ -1,4 +1,6 @@
 class Api::V1::BaseController < ActionController::API
+  skip_before_action :authenticate_user!, raise: false
+  before_action :authenticate_request!
 
   protected
 
@@ -6,10 +8,9 @@ class Api::V1::BaseController < ActionController::API
     begin
       payload = JsonWebToken.decode(auth_token)
       @current_user = User.find_by_id(payload["sub"])
-    rescue ActiveRecord::RecordNotFound => e
-      render json: {errors: e.message}, status: :unauthorized
-    rescue JWT::DecodeError => e
-      render json: {errors: e.message}, status: :unauthorized
+      render json: {is_success: false, error_code: 400, message: "Invalid auth token", result: nil } if @current_user.nil?
+    rescue JWT::DecodeError
+      render json: {is_success: false, error_code: 400, message: "Invalid auth token", result: nil }
     end
   end
 

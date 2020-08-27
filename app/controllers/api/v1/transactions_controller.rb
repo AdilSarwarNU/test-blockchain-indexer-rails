@@ -26,7 +26,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
   end
 
   def comments
-    @comments = Comment.where(transaction_id: params[:id])
+    @comments = Comment.where(transaction_id: params[:id]).desc_created_at.page(params[:page]).per(params[:per_page])
     render json: @comments
   end
 
