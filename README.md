@@ -21,7 +21,9 @@ First, install the gems required by the application:
 
 Next, create and execute the database migrations/schema setup:
 > rake db:create
+
 > rake db:setup
+
 > rails db:migrate
 
 Now, Create testing user in rails console
